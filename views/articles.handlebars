@@ -1,0 +1,27 @@
+<div id="main-content">
+
+
+<h1>Scraped Articles</h1>
+  
+<!--
+loop through database items and display the ones that have a false value for isDone
+ -->
+    <ul>
+      {{#each articles}}
+          <li>
+            {{title}}: 
+            <a href="{{link}}">{{link}}</a>
+<!--
+input for changing item to done
+
+            <form action="list/update/{{id}}?" method="POST">
+              
+              <button name="isDone" value="true" type="submit">Done!</button>
+            </form>
+             -->
+
+          </li>
+      {{/each}}
+    </ul>
+
+</div>
