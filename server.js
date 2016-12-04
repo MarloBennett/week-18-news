@@ -58,34 +58,42 @@ db.once("open", function() {
 // Scrape data from one site and place it into the mongodb db
 app.get("/", function(req, res) {
   // First, we grab the body of the html with request
-  request("https://news.ycombinator.com/", function(error, response, html) {
+  request("https://www.bustle.com/lifestyle", function(error, response, html) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(html);
     // Now, we grab every h2 within an article tag, and do the following:
-    $(".title").each(function(i, element) {
+    $(".clip-default__title").each(function(i, element) {
 
       // Save an empty result object
       var result = {};
 
       // Add the text and href of every link, and save them as properties of the result object
-      result.title = $(this).children("a").text();
-      result.link = $(this).children("a").attr("href");
+     // result.title = $(this).children().children("h3").text();
+      result.title = $(this).text();
+      result.link = $(this).closest("a").attr("href");
 
-      // Using our Article model, create a new entry
+
+      // Using our Article model, create a new entry if article doesn't already exist
       // This effectively passes the result object to the entry (and the title and link)
-      var entry = new Article(result);
+    Article.count({title: result.title}, function (err, count) {
 
-      // Now, save that entry to the db
-      entry.save(function(err, doc) {
-        // Log any errors
-        if (err) {
-          console.log(err);
-        }
-        // Or log the doc
-        else {
-          console.log(doc);
-        }
-      });
+     	if (count == 0) {
+
+		      var entry = new Article(result);
+
+		      // Now, save that entry to the db
+		      entry.save(function(err, doc) {
+		        // Log any errors
+		        if (err) {
+		          console.log(err);
+		        }
+		        // Or log the doc
+		        else {
+		          console.log(doc);
+		        }
+		      });
+	  	}
+    });
 
     });
   });
@@ -95,28 +103,22 @@ app.get("/", function(req, res) {
 
 // This will get the articles we scraped from the mongoDB
 app.get("/articles", function(req, res) {
-  // Grab every doc in the Articles array
- /* Article.find({}, function(error, doc) {
-    // Log any errors
-    if (error) {
-      console.log(error);
-    }
-    // Or send the doc to the browser as a json object
-    else {
-      res.render("articles");
-    }
-  });*/
 
+  // Grab every doc in the Articles array
   	Article.find({})
 	.then(function(data) {
 		//send all objects to handlebars view
 		var articleObj = {articles: data};
-		console.log(articleObj);
+		//console.log(articleObj);
 		//render handlebars index page
 		res.render("articles", articleObj);
 	});
 });
 
+//TODO
+// check if articles exist
+// add input to add comments
+// add input to delete comments
 
 // Listen on port 3000
 app.listen(PORT, function() {
