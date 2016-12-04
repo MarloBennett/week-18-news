@@ -1,0 +1,23 @@
+<div id="main-content">
+
+  
+<!--
+loop through database items and display the ones that have a false value for isDone
+ -->
+    <ul>
+      {{#each toDoList}}
+          <li>
+            {{itemName}}
+<!--
+input for changing item to done
+ -->
+            <form action="list/update/{{id}}?" method="POST">
+              
+              <button name="isDone" value="true" type="submit">Done!</button>
+            </form>
+
+          </li>
+      {{/each}}
+    </ul>
+
+</div>

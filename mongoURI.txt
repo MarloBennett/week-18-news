@@ -1,0 +1,5 @@
+Welcome to mLab.  Your new subscription is being created and will be available shortly.  Please consult the mLab Add-on Admin UI to check on its progress.
+Created mongolab-objective-44531 as MONGODB_URI
+Use heroku addons:docs mongolab to view documentation
+
+MONGODB_URI: mongodb://heroku_ftmcxwjb:frmtdj2fie03n5b63ukbo440sm@ds119768.mlab.com:19768/heroku_ftmcxwjb
