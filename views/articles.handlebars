@@ -11,14 +11,17 @@ loop through database items and display the ones that have a false value for isD
           <li>
             {{title}}: 
             <a href="https://www.bustle.com{{link}}">{{link}}</a>
+            <br />
 <!--
-input for changing item to done
-
-            <form action="list/update/{{id}}?" method="POST">
+input for adding a comment
+ -->
+            <form action="/submit/{{id}}" method="POST">
               
-              <button name="isDone" value="true" type="submit">Done!</button>
+              <textarea name="body" placeholder="Add a comment"></textarea>
+              <br />
+              <button name="addComment" type="submit">Submit</button>
             </form>
-             -->
+            
 
           </li>
       {{/each}}

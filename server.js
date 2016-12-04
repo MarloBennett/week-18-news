@@ -79,19 +79,19 @@ app.get("/", function(req, res) {
 
      	if (count == 0) {
 
-		      var entry = new Article(result);
+		    var entry = new Article(result);
 
-		      // Now, save that entry to the db
-		      entry.save(function(err, doc) {
+		    // Now, save that entry to the db
+		    entry.save(function(err, doc) {
 		        // Log any errors
-		        if (err) {
-		          console.log(err);
-		        }
+		      if (err) {
+		        console.log(err);
+		      }
 		        // Or log the doc
-		        else {
-		          console.log(doc);
-		        }
-		      });
+		      else {
+		        console.log(doc);
+		      }
+		    });
 	  	}
     });
 
@@ -115,8 +115,34 @@ app.get("/articles", function(req, res) {
 	});
 });
 
+app.post("/submit/:id", function(req, res) {
+	
+	var newComment = new Comment(req.body);
+
+  // And save the new comment the db
+  newComment.save(function(error, doc) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    // Otherwise
+    else {
+      // Use the article id to find and update its comment
+      Article.findOneAndUpdate({"_id": req.params.id}, { $push: { "comment": doc._id } }, { new: true }, function(err, newdoc) {
+        // Send any errors to the browser
+        if (err) {
+          res.send(err);
+        }
+        // Or send the newdoc to the browser
+        else {
+          res.send(newdoc);
+        }
+      });
+    }
+  });
+});
+
 //TODO
-// check if articles exist
 // add input to add comments
 // add input to delete comments
 
