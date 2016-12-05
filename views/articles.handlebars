@@ -8,10 +8,18 @@ loop through database items and display the ones that have a false value for isD
  -->
     <ul>
       {{#each articles}}
-          <li>
+          <li class="listing">
             {{title}}: 
             <a href="https://www.bustle.com{{link}}">{{link}}</a>
             <br />
+            Comments:
+            {{#each comment}}
+             {{body}}
+             {{/each}}
+
+              <br />
+            
+              <br />
 <!--
 input for adding a comment
  -->

@@ -103,17 +103,37 @@ app.get("/", function(req, res) {
 
 // This will get the articles we scraped from the mongoDB
 app.get("/articles", function(req, res) {
-
   // Grab every doc in the Articles array
   	Article.find({})
 	.then(function(data) {
 		//send all objects to handlebars view
 		var articleObj = {articles: data};
-		//console.log(articleObj);
+		console.log(articleObj);
+		//render handlebars articles page
+		res.render("articles", articleObj);
+	});
+
+	
+});
+
+/*app.get("/articles", function(req, res) {
+  // Grab every doc in the Articles array
+  	Article.find({})
+	.populate("comment")
+    // Now, execute the query
+    .exec(function(error, doc) {
+      // Send any errors to the browser
+      if (error) {
+        res.send(error);
+      }
+    }).then(function(data) {
+		//send all objects to handlebars view
+		var articleObj = {articles: data};
+		console.log(articleObj);
 		//render handlebars index page
 		res.render("articles", articleObj);
 	});
-});
+});*/
 
 app.post("/submit/:id", function(req, res) {
 	
@@ -133,17 +153,38 @@ app.post("/submit/:id", function(req, res) {
         if (err) {
           res.send(err);
         }
-        // Or send the newdoc to the browser
+        // otherwise, send to route to populate comments
         else {
-          res.send(newdoc);
+          res.redirect("/populated");
         }
       });
     }
   });
 });
 
+
+// Route to see populate articles with comments
+app.get("/populated", function(req, res) {
+  // Prepare a query to find all users..
+  Article.find({})
+    // ..and on top of that, populate the comments (replace the objectIds in the notes array with bona-fide notes)
+    .populate("comment")
+    // Now, execute the query
+    .exec(function(error, doc) {
+      // Send any errors to the browser
+      if (error) {
+        res.send(error);
+      }
+      // otherwise, send back to articles page
+      else {
+        res.send(doc);
+      }
+    });
+});
+
+
 //TODO
-// add input to add comments
+// get comments showing on articles page
 // add input to delete comments
 
 // Listen on port 3000
