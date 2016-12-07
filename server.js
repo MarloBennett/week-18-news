@@ -100,7 +100,7 @@ app.get("/", function(req, res) {
   // Tell the browser that we finished scraping the text
   res.render("index");
 });
-
+/*
 // This will get the articles we scraped from the mongoDB
 app.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
@@ -108,15 +108,15 @@ app.get("/articles", function(req, res) {
 	.then(function(data) {
 		//send all objects to handlebars view
 		var articleObj = {articles: data};
-		console.log(articleObj);
+		console.log(JSON.stringify(articleObj));
 		//render handlebars articles page
 		res.render("articles", articleObj);
 	});
 
 	
 });
-
-/*app.get("/articles", function(req, res) {
+*/
+app.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
   	Article.find({})
 	.populate("comment")
@@ -133,7 +133,7 @@ app.get("/articles", function(req, res) {
 		//render handlebars index page
 		res.render("articles", articleObj);
 	});
-});*/
+});
 
 app.post("/submit/:id", function(req, res) {
 	
@@ -155,17 +155,17 @@ app.post("/submit/:id", function(req, res) {
         }
         // otherwise, send to route to populate comments
         else {
-          res.redirect("/populated");
+          res.redirect("/articles");
         }
       });
     }
   });
 });
 
-
+/*
 // Route to see populate articles with comments
 app.get("/populated", function(req, res) {
-  // Prepare a query to find all users..
+  // Prepare a query to find all articles..
   Article.find({})
     // ..and on top of that, populate the comments (replace the objectIds in the notes array with bona-fide notes)
     .populate("comment")
@@ -177,11 +177,12 @@ app.get("/populated", function(req, res) {
       }
       // otherwise, send back to articles page
       else {
-        res.send(doc);
+       // res.send(doc);
+       res.redirect("/articles");
       }
     });
 });
-
+*/
 
 //TODO
 // get comments showing on articles page
