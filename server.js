@@ -54,21 +54,19 @@ db.once("open", function() {
 
 //Routes
 
-// home page with button to go to articles list
-// Scrape data from one site and place it into the mongodb db
+// Scrape data from site and place it into the mongodb db
 app.get("/", function(req, res) {
-  // First, we grab the body of the html with request
+  // grab the body of the html with request
   request("https://www.bustle.com/lifestyle", function(error, response, html) {
-    // Then, we load that into cheerio and save it to $ for a shorthand selector
+    //load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(html);
-    // Now, we grab every h2 within an article tag, and do the following:
+    // grab elements with the specified class and do the following:
     $(".clip-default__title").each(function(i, element) {
 
       // Save an empty result object
       var result = {};
 
       // Add the text and href of every link, and save them as properties of the result object
-     // result.title = $(this).children().children("h3").text();
       result.title = $(this).text();
       result.link = $(this).closest("a").attr("href");
 
@@ -97,11 +95,12 @@ app.get("/", function(req, res) {
 
     });
   });
-  // Tell the browser that we finished scraping the text
-  res.render("index");
+  // redirect to the display articles page
+  res.redirect("/articles");
 });
 /*
-// This will get the articles we scraped from the mongoDB
+
+// This will get the articles we scraped from the mongoDB - didn't use; used version that populated comments in the same route
 app.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
   	Article.find({})
@@ -112,10 +111,10 @@ app.get("/articles", function(req, res) {
 		//render handlebars articles page
 		res.render("articles", articleObj);
 	});
-
-	
 });
 */
+
+// This will get the articles scraped from the mongo db and populate the comments
 app.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
   	Article.find({})
@@ -130,16 +129,18 @@ app.get("/articles", function(req, res) {
 		//send all objects to handlebars view
 		var articleObj = {articles: data};
 		console.log(articleObj);
-		//render handlebars index page
+		//render handlebars articles page
 		res.render("articles", articleObj);
 	});
 });
 
+//route to post a comment
 app.post("/submit/:id", function(req, res) {
 	
+  //save comment in a variable
 	var newComment = new Comment(req.body);
 
-  // And save the new comment the db
+  //save the new comment the db
   newComment.save(function(error, doc) {
     // Log any errors
     if (error) {
@@ -153,7 +154,7 @@ app.post("/submit/:id", function(req, res) {
         if (err) {
           res.send(err);
         }
-        // otherwise, send to route to populate comments
+        // otherwise, redirect to articles route, which will populate comments
         else {
           res.redirect("/articles");
         }
@@ -162,8 +163,23 @@ app.post("/submit/:id", function(req, res) {
   });
 });
 
+//route to delete a comment
+app.post("/delete/:id", function(req, res) {
+  //find comment by id
+  Comment.findOneAndRemove({"_id": req.params.id}, function(error, removed) {
+    // Send any errors to the browser
+    if (error) {
+      res.send(error);
+    }
+    //otherwise, redirect to articles page
+    else {
+      res.redirect("/articles");
+    }
+  });
+});
+
 /*
-// Route to see populate articles with comments
+// Route to see populate articles with comments - didn't use; did this in the articles route
 app.get("/populated", function(req, res) {
   // Prepare a query to find all articles..
   Article.find({})
@@ -183,10 +199,6 @@ app.get("/populated", function(req, res) {
     });
 });
 */
-
-//TODO
-// get comments showing on articles page
-// add input to delete comments
 
 // Listen on port 3000
 app.listen(PORT, function() {

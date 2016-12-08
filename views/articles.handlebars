@@ -4,7 +4,7 @@
 <h1>Scraped Articles</h1>
   
 <!--
-loop through database items and display the ones that have a false value for isDone
+loop through database items and display the article titles and links
  -->
     <ul>
       {{#each articles}}
@@ -13,23 +13,35 @@ loop through database items and display the ones that have a false value for isD
             <a href="https://www.bustle.com{{link}}">{{link}}</a>
             <br />
             Comments:
+            <br />
+            <!--
+loop through comments and display each one
+ -->
             {{#each comment}}
              {{body}}
+             <br />
+             <!--
+input for deleting a comment
+ -->
+            <form action="/delete/{{id}}" method="POST">
+
+              <button name="deleteComment" type="submit">Delete Comment</button>
+            </form>
              {{/each}}
 
               <br />
             
-              <br />
 <!--
 input for adding a comment
  -->
             <form action="/submit/{{id}}" method="POST">
               
-              <textarea name="body" placeholder="Add a comment"></textarea>
+              <textarea name="body" placeholder="Add a new comment"></textarea>
               <br />
               <button name="addComment" type="submit">Submit</button>
             </form>
             
+            <br />
 
           </li>
       {{/each}}
