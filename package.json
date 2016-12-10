@@ -1,6 +1,9 @@
 {
   "name": "week-18-news",
   "version": "1.0.0",
+  "engines": {
+    "node": "4.5.0"
+  },
   "description": "",
   "main": "server.js",
   "scripts": {
