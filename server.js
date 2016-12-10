@@ -39,7 +39,7 @@ app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/scrapedArticles");
+mongoose.connect("mongodb://heroku_ftmcxwjb:frmtdj2fie03n5b63ukbo440sm@ds119768.mlab.com:19768/heroku_ftmcxwjb");
 var db = mongoose.connection;
 
 // Show any mongoose errors
