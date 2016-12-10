@@ -7,8 +7,8 @@ var mongoose = require("mongoose");
 var exphbs = require("express-handlebars");
 
 // Requiring our Comment and Article models
-var Comment = require("./models/Comment.js");
-var Article = require("./models/Article.js");
+var Comment = require("./models/comment.js");
+var Article = require("./models/article.js");
 
 // Our scraping tools
 var request = require("request");
