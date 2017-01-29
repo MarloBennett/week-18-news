@@ -1,6 +1,6 @@
 # Web-Scraping News
 
-This app uses scrapes new articles from a website, displays the articles, and stores them using MongoDB. Users can comment on displayed articles.
+This app scrapes news articles from a website, displays the articles, and stores them using MongoDB. Users can comment on displayed articles.
 
 * JavaScript
 * Node.js
